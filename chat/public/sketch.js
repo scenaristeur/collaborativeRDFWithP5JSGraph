@@ -47,6 +47,8 @@ var userid;
 var userDiv;
 var pg;
 var previous=[];
+var catchClick=true;
+var limiteDrag=0;
 
 function setup() {
 	frameRate(10);
@@ -63,6 +65,7 @@ function setup() {
 	
 	previous.x=CANVAS_WIDTH/2;
 	previous.y=CANVAS_HEIGHT/2;
+		limiteDrag=displayHeight-200;
 	centroid.setValue(width / 2, height / 2, 0);
 	//tCtx = document.getElementById('textCanvas').getContext('2d');
 	
@@ -130,7 +133,7 @@ function setup() {
 	//console.log(window.location);
 	socket = io.connect(window.location.href);
 	
-	console.log(socket);
+	//console.log(socket);
 	// We make a named event called 'mouse' and write an
 	// anonymous callback function
 	/*socket.on('mouse', function(data) {
@@ -267,10 +270,11 @@ if ((z > 100) || (z < 1)) {
 	//	console.log(leMot);
 	text(leMot, 200, 200);
 }*/
-//checkMoyenne();
-for (j=0;j<physics.attractions.length;j++){
+checkMoyenne();
+/*for (j=0;j<physics.attractions.length;j++){
 	physics.attractions.remove(j);
-}
+}*/
+console.log(physics.attractions.length);
 }
 
 
@@ -311,7 +315,7 @@ function checkMoyenne(){
 		var v2 = createVector(b.position.x, b.position.y, b.position.z);
 		
 		var d = v1.dist(v2);
-		if (d>moyenne){
+		if ((d>moyenne)||(d>400)){
 			physics.attractions.remove(j);
 			//		console.log("remove "+d+"/"+moyenne+" "+physics.attractions.length);
 		}
@@ -479,7 +483,8 @@ function chargeDemo() {
 
 function resetCam() {
 	// pb pour remettre le slider a Zero
-	sliderZ.value(200);
+	
+		catchClick=false;sliderZ.value(200);
 	sliderCamX.value(0);
 	sliderCamY.value(0);
 	sliderCamZ.value(0);

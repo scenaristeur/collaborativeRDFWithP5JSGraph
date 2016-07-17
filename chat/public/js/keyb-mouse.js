@@ -2,44 +2,46 @@ var canvas1=document.getElementById("canvas");
 
 var current=[];
 
+function mousePressed(){
+	previous.x=mouseX;
+	previous.y=mouseY;
+}
 
 function mouseDragged() {
-	// next = 0;
-	//painting = true;
+	
 	current.x = mouseX;
 	current.y = mouseY;
-	//paths.push(new Path());
-	//console.log(previous);
-	//console.log("current");
-	//console.log(current);
 	
-	if (current.x!=previous.x){
-		
-		sliderCamX.value(sliderCamX.value()+previous.x-current.x);
-		previous.x=current.x;
+	if((mouseX)>115 && (mouseY<limiteDrag-200)){
+		//desactiver drag si changement par slider
+		catchClick=true;
 	}
 	
-	if (current.y!=previous.y){
+	if (catchClick){
+		if (current.x!=previous.x){
+			sliderCamX.value(sliderCamX.value()+(previous.x-current.x));
+			//sliderCamX.value(sliderCamX.value()+(previous.x-current.x)*(-sliderCamZ.value()/100)-1);
+			previous.x=current.x;
+		}
 		
-		sliderCamY.value(sliderCamY.value()+previous.y-current.y);
-		previous.y=current.y;
+		if (current.y!=previous.y){
+			sliderCamY.value(sliderCamY.value()+(previous.y-current.y));
+			//sliderCamY.value(sliderCamY.value()+(previous.y-current.y)*(-sliderCamZ.value()/100)+1);
+			previous.y=current.y;
+		}
 	}
-	
-	
 }
 
 function mouseReleased(){
-	console.log("re");
-	previous.x=CANVAS_WIDTH/2;
-	previous.y=CANVAS_HEIGHT/2;
+	catchClick=true;
 }
 
+
 function mouseWheel(event) {
-  println(event.delta);
-  //move the square according to the vertical scroll amount
-//  pos += event.delta;
+  //println(event.delta);
+   sliderCamZ.value(sliderCamZ.value()+event.delta);
   //uncomment to block page scrolling
-  sliderCamZ.value(sliderCamZ.value()+event.delta);
+
   return false;
 }
 

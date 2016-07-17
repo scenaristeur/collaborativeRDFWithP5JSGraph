@@ -57,8 +57,8 @@ Noeud.prototype.update = function() {
 	//	if(attParNoeud<10){
 		if ((b != this.particle) && (b != centre)) {
 	//		console.log(d);
-			if (d < 400){
-			physics.makeAttraction(this.particle, b, -500, 400);
+			if (d < 300){
+			physics.makeAttraction(this.particle, b, -100, 300);
 	//		attParNoeud++;
 			//recherche de l'existance d'une attraction
 		//	console.log(physics.attractions.length);
