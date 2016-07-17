@@ -11,8 +11,8 @@ function Noeud(texte) {
 	this.proprietes = [];
 	this.nbAtt=0
 	
-	this.particle = physics.makeParticle(10.0, 0, 0, 0, 10.0);
-	this.particle.position = new Vector(centroid.x()+random(-200,200), centroid.y()+random(-200,200) , centroid.z()+random(-200,200));
+	this.particle = physics.makeParticle(10.0, 0, 0, 0);
+	this.particle.position = new Vector(centroid.x()+random(-1,1), centroid.y()+random(-1,1) , centroid.z()+random(-1,1));
 	var imageConst;
 	if(this.texte.length>20){
 		var littleText=this.texte.slice(0,20).concat("...");
@@ -57,8 +57,8 @@ Noeud.prototype.update = function() {
 	//	if(attParNoeud<10){
 		if ((b != this.particle) && (b != centre)) {
 	//		console.log(d);
-			if (d < 300){
-			physics.makeAttraction(this.particle, b, -100, 300);
+			if (d < 200){
+			physics.makeAttraction(this.particle, b, -2, 200);
 	//		attParNoeud++;
 			//recherche de l'existance d'une attraction
 		//	console.log(physics.attractions.length);

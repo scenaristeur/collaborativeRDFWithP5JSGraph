@@ -271,9 +271,16 @@ if ((z > 100) || (z < 1)) {
 	text(leMot, 200, 200);
 }*/
 checkMoyenne();
-/*for (j=0;j<physics.attractions.length;j++){
+if (physics.attractions.length>300){
+for (j=0;j<physics.attractions.length;j=j+2){
 	physics.attractions.remove(j);
-}*/
+	//physics.attractions=[];
+}
+}
+if(physics.attractions.length>1000){
+	
+	physics.attractions=[];
+}
 console.log(physics.attractions.length);
 }
 
@@ -315,7 +322,7 @@ function checkMoyenne(){
 		var v2 = createVector(b.position.x, b.position.y, b.position.z);
 		
 		var d = v1.dist(v2);
-		if ((d>moyenne)||(d>400)){
+		if ((d>moyenne-10)||(d>400)){
 			physics.attractions.remove(j);
 			//		console.log("remove "+d+"/"+moyenne+" "+physics.attractions.length);
 		}
