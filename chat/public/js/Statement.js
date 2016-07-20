@@ -6,7 +6,9 @@ function Statement(sujetTemp, propriete, objetTemp) {
   this.objet = objet;
   // console.log("PROPRIETE "+this.propriete);
   /* TODO : s'il n'existe pas de spring avec ces deux neuds et cette propriete, le créer */
-   var spring = physics.makeSpring(sujet.particle, objet.particle, SPRING_STRENGTH/35, SPRING_DAMPING/2, 200, this.propriete);
+   var spring = physics.makeSpring(sujet.particle, objet.particle, SPRING_STRENGTH/10, SPRING_DAMPING/1.9, 200, this.propriete);
+  sujet.particle.mass0=sujet.particle.mass0+10;
+  objet.particle.mass0=objet.particle.mass0+10;
  // var spring = physics.makeSpring(sujet.particle, objet.particle,  forceRessort, souplesseRessort, longueurRessort, this.propriete);
   // console.log(spring);
   var prop = {

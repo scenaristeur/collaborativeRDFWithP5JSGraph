@@ -32,6 +32,8 @@ var forceRessort = 0.2;
 var souplesseRessort = .1; //.2
 var longueurRessort = 80;
 var centre;
+var moyenne=100;
+var seuil;
 
 var tCtx;
 var taille;
@@ -96,144 +98,37 @@ function setup() {
 	buttonResetCam.position(10, 580);
 	buttonResetCam.mousePressed(resetCam);
 	
-	//curseursDiv=document.getElementById('curseurs');
-	//curseursDiv.appendChild(sliderCamX);
-	//curseursDiv.child(sliderCamY);
-	//curseursDiv.child(sliderCamZ);
-	//curseursDiv.child(buttonResetCam);
+		buttontoogleTexte = createButton("Toogle Texte");
+	buttontoogleTexte.position(10, 480);
+	buttontoogleTexte.mousePressed(toogleTexte);
 	
+
+	//socket = io.connect(window.location.href);
 	
-	
-	/*buttonChargeDemo = createButton("Charge Demo");
-		saisieDiv.child(buttonChargeDemo);
-		buttonChargeDemo.attribute('id', 'chargeDemo');
-		buttonChargeDemo.mousePressed(chargeDemo);
-		buttonAfficheTexte = createButton("Affiche texte");
-		saisieDiv.child(buttonAfficheTexte);
-		buttonAfficheTexte.attribute('id', 'afficheTexte');
-		buttonAfficheTexte.mousePressed(toogleTexte);
-	*/
-	
-	/*buttonLogin = createButton("Login");
-		saisieDiv.child(buttonLogin);
-		buttonLogin.attribute('id', 'login');
-		buttonLogin.mousePressed(login);
-		userDiv = createInput('');
-		userDiv.attribute('id', 'userDiv');
-		userDiv.attribute('placeholder', 'Inconnu');
-	saisieDiv.child(userDiv);*/
-	
-	
-	//background(255,255,0);
-	/*	button = createButton('next Ressource');
-		button.position(10, 500);
-	button.mousePressed(nextRessource);*/
-	// Start a socket connection to the server
-	// Some day we would run this server somewhere else
-	//console.log(window.location);
-	socket = io.connect(window.location.href);
-	
-	//console.log(socket);
-	// We make a named event called 'mouse' and write an
-	// anonymous callback function
-	/*socket.on('mouse', function(data) {
-		//console.log("Got: " + data.x + " " + data.y);
-		// Draw a blue circle
-		fill(0,0,255);
-		noStroke();
-		ellipse(data.x,data.y,4,4);
-		}
-	);*/
-	
-	socket.on('nbUsers', function(data) {
-		console.log(data);
-		nbUsers=data.nbUsers;
-		console.log("nbUsers: " + data.nbUsers);
-		// Draw a blue circle
-		fill(0,0,255);
-		document.getElementById("nbUsers").innerHTML =nbUsers;
-		//noStroke();
-		//ellipse(data.x,data.y,80,80);
-		
-	}
-	);
-	
-	
-	socket.on('mot', function(data) {
-		console.log(data);
-		mot=data.mot;
-		console.log("mot: " + data.mot);
-		// Draw a blue circle
-		fill(0,0,255);
-		document.getElementById("mot").innerHTML =mot;
-		leMot=mot;
-		//noStroke();
-		//ellipse(data.x,data.y,80,80);
-	}
-	);
-	
-	
-	socket.on('hebergeur', function(data) {
-		console.log(data);
-		hebergeur=data.hebergeur;
-		console.log("ME : "+socket.id+" hebergeur: " + hebergeur);
-		// Draw a blue circle
-		fill(0,0,255);
-		document.getElementById("hebergeur").innerHTML =hebergeur;
-		createUser(person);
-		//noStroke();
-		//ellipse(data.x,data.y,80,80);
-	}
-	);
-	
-	
-	socket.on('newStatement',	function(data) {
+/*	socket.on('newStatement',	function(data) {
 		// Data comes in as whatever was sent, including objects
 		console.log("Received: 'newStatement'");
 		var statement=data.newStatement;
 		console.log(statement);
-		
 		var newStatement = new Statement(statement.sujet.texte, statement.propriete, statement.objet.texte); 
 		statements.add(statemenent)
 		//socket.broadcast.emit(data);
 		//var mot=mots[indiceMot];
 		//console.log("send"+mot);
-	});
-	
-	
-	
-	
+});*/
 }
 
 function draw() {
-	//background(255,50);
 	background(255,50);
-	// orbitControl();
-	//	checkLogin();
 	fill(255, 255, 255);
-	//console.log(physics.attractions.length);
-	//physics.attractions=[];
-	//	pg.background(255);
-	//pg.text('hello world');
-	
-	//texture(pg);
-	//plane(200);
-	//plane.position(0,0,0);
-	
 	translate(-width / 2, -height / 2);
 	var zSlider = (sliderZ.value() - 200) * 10;
 	centroid.setZ(zSlider);
 	var camSliderZ = sliderCamZ.value();
 	var camSliderX = sliderCamX.value();
 	var camSliderY = sliderCamY.value();
-	//	var camSliderY = (sliderCamY.value() - 100) * 10;
 	camera(camSliderX, camSliderY, camSliderZ);
-	//	console.log(camSliderX + " " + camSliderY + " " + camSliderZ);
 	physics.tick(); //within physics library, creates a counter to continue to make more nodes
-	
-	
-	
-	//  gestion_espacement();
 	var canvas1 = document.getElementById('canvas');
 	centre.position.x = width / 2;
 	centre.position.y = height / 2;
@@ -249,39 +144,32 @@ function draw() {
 		sphere(5);
 		pop();
 	}
-	
 	individuals.forEach(drawElement);
 	statements.forEach(drawSpring);
-	
-	//noLoop();
-//}
-//	theta += 0.05;
 z = z + d;
 if ((z > 100) || (z < 1)) {
 	d = -d;
 	
 }
 
-
-
-
 /*
 	if (typeof leMot !== "undefined") {
 	//	console.log(leMot);
 	text(leMot, 200, 200);
 }*/
+console.log(moyenne+" "+physics.attractions.length);
 checkMoyenne();
+/*
 if (physics.attractions.length>300){
 for (j=0;j<physics.attractions.length;j=j+2){
 	physics.attractions.remove(j);
-	//physics.attractions=[];
 }
 }
 if(physics.attractions.length>1000){
 	
 	physics.attractions=[];
-}
-console.log(physics.attractions.length);
+}*/
+document.getElementById("nbAtt").innerHTML=physics.attractions.length;
 }
 
 
@@ -289,93 +177,29 @@ function checkMoyenne(){
 	var maxi=0;
 	var somme=0;
 	var length=0;
-	
-	
 	for (j=0;j<physics.attractions.length;j++){
 		attraction=physics.attractions[j];
-		//var length=attraction.length;
-		//console.log("l "+length);
-		
 		var a=attraction.a;
 		var b=attraction.b;
 		var v1 = createVector(a.position.x, a.position.y, a.position.z);
 		var v2 = createVector(b.position.x, b.position.y, b.position.z);
-		
 		var d = v1.dist(v2);
-		somme=somme+d;
-		
-		
-		//console.log("remove "+d+"/"+moyenne+" "+physics.attractions.length);
-		
+		somme=somme+d;	
 	}
-	moyenne=somme/physics.attractions.length;
-	//console.log(somme);
-	//	if(moyenne>260){
+	moyenne=somme/(physics.attractions.length+1);
+	//if(moyenne>200){
 	for (j=0;j<physics.attractions.length;j++){
-		attraction=physics.attractions[j];
-		//var length=attraction.length;
-		//console.log("l "+length);
-		
+		attraction=physics.attractions[j];		
 		var a=attraction.a;
 		var b=attraction.b;
 		var v1 = createVector(a.position.x, a.position.y, a.position.z);
-		var v2 = createVector(b.position.x, b.position.y, b.position.z);
-		
+		var v2 = createVector(b.position.x, b.position.y, b.position.z);	
 		var d = v1.dist(v2);
-		if ((d>moyenne-10)||(d>400)){
+		if (((d<500)&&(d>(moyenne+1)))||(d>500)){//||
 			physics.attractions.remove(j);
-			//		console.log("remove "+d+"/"+moyenne+" "+physics.attractions.length);
-		}
-		
-		
-		//	console.log("remove "+d+"/"+moyenne+" "+physics.attractions.length);
-	}
-	//	}
+		//}
+	}}
 }
-
-
-/*
-	function mouseDragged() {
-	// Draw some white circles
-	fill(255);
-	noStroke();
-	ellipse(mouseX,mouseY,2,2);
-	// Send the mouse coordinates
-	sendmouse(mouseX,mouseY);
-}*/
-
-// Function for sending to the socket
-/*function sendmouse(xpos, ypos) {
-	// We are sending!
-	//console.log("sendmouse: " + xpos + " " + ypos);
-	
-	// Make a little object with  and y
-	var data = {
-	x: xpos,
-	y: ypos
-	};
-	
-	// Send that object to the socket
-	socket.emit('mouse',data);
-}*/
-/*
-	function nextRessource() {
-	var data = { action: "nextRessource"};
-	console.log("envoi next ressource");
-	// Send that object to the socket
-	socket.emit('action',data);
-	}
-	
-	function checkLogin() {
-	if (typeof sessionStorage != 'undefined') {
-	userid = sessionStorage.getItem('userid');
-	document.getElementById('userDiv').value = userid;
-	
-	} else {
-	alert("localStorage n'est pas supporté");
-	}
-	
-}*/
 
 function drawElement(element, index, array) {
 	fill(255);
@@ -387,69 +211,14 @@ function drawSpring(element,index,array){
 	fill(255);
 	element.draw();
 }
-/*
-	function login() {
-	window.location = "/login";
-}*/
 
 function init() {
-	
-	// Init canvas
-	/* canvas = document.getElementById('canvas');
-		ctx = canvas.getContext('2d');
-	ctx.fillStyle = 'black';*/
-	/*
-		// Start tracking mouse coords on mousedown
-		canvas.onmousedown = function(e) {
-		//  movingParticle = e.shiftKey ? small : big;
-		mouseX = e.clientX;
-		mouseY = e.clientY;
-		canvas.onmousemove(e);
-		}
-		
-		// Stop tracking mouse coords on mouseup
-		canvas.onmouseup = function(e) {
-		mouseX = null;
-		mouseY = null;
-		movingParticle = null;
-		}
-		
-		// Continue tracking mouse coords if mouse is down
-		canvas.onmousemove = function(e) {
-		if (mouseX === null || mouseY === null) {
-		return;
-		}
-		mouseX = e.clientX;
-		mouseY = e.clientY;
-		mouseX -= canvas.offsetLeft;
-		mouseY -= canvas.offsetTop;
-		if ((typeof movingParticle != 'undefined') && (movingParticle != null)) {
-		movingParticle.position.set(mouseX, mouseY, 0);
-		movingParticle.velocity.clear();
-		}
-		}
-	*/
-	// Init particle system
 	physics = new ParticleSystem(PHYS_GRAVITY, PHYS_DRAG);
-	
-	// Init particles
 	centre = physics.makeParticle(2.0, width / 2, height / 2, 0.0);
 	centre.lock = true;
-	
-	// Begin rendering
-	///////////////////////////////////////////////////////////////////	setInterval(draw, FRAME_DELAY);
-	// var hr = document.createElement("HR");
-	//canvas.parentNode.insertBefore(hr, canvas.nextSibling);
 }
 
-window.addEventListener('load', function() {
-	
-});
-
-
-
 function afficheImage() {
-	//	background(0);
 	ambientLight(300);
 	pointLight(250, 250, 250, 100, 100, 0);
 	translate(-220, 0, 0);
@@ -472,14 +241,12 @@ function afficheImage() {
 	pop();
 	translate(-220, -50, z);
 	push();
-	
 	plane(taille * 2, 40);
 	pop();
 	theta += 0.05;
 	z = z + d;
 	if ((z > 100) || (z < 1)) {
 		d = -d;
-		
 	}
 }
 
@@ -488,16 +255,12 @@ function chargeDemo() {
 	chargeData("dc");
 }
 
-function resetCam() {
-	// pb pour remettre le slider a Zero
-	
+function resetCam() {	
 		catchClick=false;sliderZ.value(200);
 	sliderCamX.value(0);
 	sliderCamY.value(0);
 	sliderCamZ.value(0);
 	console.log("resetSlider");
-	//	var sliderZ, sliderCamZ,sliderCamX,sliderCamY;
-	
 }
 
 function toogleTexte() {
@@ -507,11 +270,3 @@ function toogleTexte() {
 function addStatement(statement){
 	statements.push(statement);
 }
-/*
-	function createUser(person){
-	console.log("creation Statement "+person);
-	var newStatement = new Statement(person, "type", "Joueur");
-	var data = {		newStatement: newStatement	};
-	socket.emit("newStatement",data);
-	
-}*/

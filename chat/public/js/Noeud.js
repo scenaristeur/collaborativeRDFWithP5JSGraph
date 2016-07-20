@@ -11,8 +11,8 @@ function Noeud(texte) {
 	this.proprietes = [];
 	this.nbAtt=0
 	
-	this.particle = physics.makeParticle(10.0, 0, 0, 0);
-	this.particle.position = new Vector(centroid.x()+random(-1,1), centroid.y()+random(-1,1) , centroid.z()+random(-1,1));
+	this.particle = physics.makeParticle(8.0, 0, 0, 0);
+	this.particle.position = new Vector(centroid.x()+random(-200,200), centroid.y()+random(-200,200) , centroid.z()+random(-200,200));
 	var imageConst;
 	if(this.texte.length>20){
 		var littleText=this.texte.slice(0,20).concat("...");
@@ -23,7 +23,7 @@ function Noeud(texte) {
 	
 	this.img = imageConst[0];
 	this.IMGtaille = imageConst[1];
-	physics.makeAttraction(centre, this.particle, 1, 0);
+	//physics.makeAttraction(centre, this.particle, 1, 0);
 	
 /*	for (i = 0; i < physics.particles.length; i++) {
 		var b = physics.particles[i];
@@ -56,9 +56,39 @@ Noeud.prototype.update = function() {
 		var d = v1.dist(v2);
 	//	if(attParNoeud<10){
 		if ((b != this.particle) && (b != centre)) {
-	//		console.log(d);
-			if (d < 200){
-			physics.makeAttraction(this.particle, b, -2, 200);
+	//if (((d<moyenne+10)))){
+		if((d<40)&&(d<moyenne+100)){
+			physics.makeAttraction(this.particle, b, -3, 40);
+			}
+/*		else if((d<30)&&(d<moyenne+10)){
+			physics.makeAttraction(this.particle, b, -.8, 30);
+			}else if((d<100)&&(d<moyenne+10)){
+			physics.makeAttraction(this.particle, b, -.65, 110);
+}*/
+			else if((d<200)&&(d<moyenne+50)){
+			physics.makeAttraction(this.particle, b, -2, 210);
+			}
+			else if((d<400)&&(d<moyenne+10)){
+			physics.makeAttraction(this.particle, b, -1, 410);
+			}
+	//}
+		/*	if (moyenne>10){
+			seuil=moyenne;
+			}else{
+			seuil=100;
+				}*/
+			
+		//	if ((d<moyenne+1)||(d<200)&&(physics.attractions.length<10000)) { //&&(physics.attractions.length<1000)
+			//physics.makeAttraction(this.particle, b, -1, 200);
+		//	}
+			/*else if((d<300)&&(physics.attractions.length<5000)){
+				physics.makeAttraction(this.particle, b, -1, 320);
+				}*/
+		
+			// }else if (d<(moyenne+seuil)/2){
+							
+			// physics.makeAttraction(this.particle, b, -1, 300);
+		
 	//		attParNoeud++;
 			//recherche de l'existance d'une attraction
 		//	console.log(physics.attractions.length);
@@ -133,7 +163,7 @@ Noeud.prototype.update = function() {
 		//	if(d>distancemin2noeuds*2){
 		
 	//}
-	}
+	//}
 }
 
 }
